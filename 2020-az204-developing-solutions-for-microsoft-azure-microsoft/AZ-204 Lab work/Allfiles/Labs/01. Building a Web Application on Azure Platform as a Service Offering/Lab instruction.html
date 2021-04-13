@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <style id="stndz-style"></style>
+    <meta name="viewport" content="width=device-width">
+    <title>Module 01 (CSR): Building a Web Application on Azure Platform as a Service Offering</title>
+</head>
+
+<body class="childClient" data-new-gr-c-s-check-loaded="14.984.0" data-gr-ext-installed="">
+    <div id="labClient" style="">
+        <div id="tabs" role="main">
+            <div id="instructionsTab" class="tab selected">
+                <div id="instructionsContent" class="tabContent withFooter instructions withNavigation"
+                    aria-label="Lab Instructions">
+                    <div class="zoomable" id="pages" style="transform: scale(1); width: 100%;">
+                        <div class="page selected" id="page1">
+                            <p></p>
+                            <blockquote class="alert">
+                                <p>The note after Exercise 1, Task 6, Step 9 and Excercise 2, Task 3, Step 8 is
+                                    incorrect. It should state "Replace the &lt;name-of-your-api-app&gt; placeholder…
+                                </p>
+                            </blockquote>
+                            <include src="https://raw.githubusercontent.com/LODSContent/All-MOC/master/MOC/SkipCleanUp"
+                                data-name="">
+                                <blockquote class="knowledge">
+                                    <p>At the end of this lab, you can skip the <strong>Clean Up</strong> exercise
+                                        directing you to remove the resources from your Subscription or Resource
+                                        Group(s). The clean up is handled automatically, after ending your lab.</p>
+                                </blockquote>
+                                <div class="moreKnowledge"><a
+                                        href="https://labclient.labondemand.com/Instructions/9356954b-1d6f-49ff-b111-66c8e2363d6f?rc=10#"
+                                        class="moreKnowledgeLink" style="display: none;">more...</a></div>
+                            </include>
+                            <include
+                                src="https://raw.githubusercontent.com/MicrosoftLearning/AZ-204-DevelopingSolutionsforMicrosoftAzure/master/Instructions/Labs/AZ-204_01_lab.md"
+                                data-name="">
+                                <h1 id="lab-building-a-web-application-on-azure-platform-as-a-service-offerings">Lab:
+                                    Building a web application on Azure platform as a service offerings</h1>
+                                <h1 id="student-lab-manual">Student lab manual</h1>
+                                <h2 id="lab-scenario">Lab scenario</h2>
+                                <p>You're the owner of a startup organization and have been building an image gallery
+                                    application for people to share great images of food. To get your product to market
+                                    as quickly as possible, you decided to use Microsoft Azure App Service to host your
+                                    web apps and APIs.</p>
+                                <h2 id="objectives">Objectives</h2>
+                                <p>After you complete this lab, you will be able to:</p>
+                                <ul>
+                                    <li>
+                                        <p>Create various apps by using App Service.</p>
+                                    </li>
+                                    <li>
+                                        <p>Configure application settings for an app.</p>
+                                    </li>
+                                    <li>
+                                        <p>Deploy apps by using Kudu, the Azure Command-Line Interface (CLI), and zip
+                                            file deployment.</p>
+                                    </li>
+                                </ul>
+                                <h2 id="lab-setup">Lab setup</h2>
+                                <ul>
+                                    <li>Estimated time: <strong>45 minutes</strong></li>
+                                </ul>
+                                <h2 id="instructions">Instructions</h2>
+                                <h3 id="before-you-start">Before you start</h3>
+                                <h4 id="sign-in-to-the-lab-virtual-machine">Sign in to the lab virtual machine</h4>
+                                <p>Ensure that you're signed in to your Windows 10 virtual machine by using the
+                                    following credentials:</p>
+                                <ul>
+                                    <li>
+                                        <p>Username: <strong>Admin</strong></p>
+                                    </li>
+                                    <li>
+                                        <p>Password: <strong>Pa55w.rd</strong></p>
+                                    </li>
+                                </ul>
+                                <h4 id="review-the-installed-applications">Review the installed applications</h4>
+                                <p>Find the taskbar on your Windows 10 desktop. The taskbar contains the icons for the
+                                    applications that you'll use in this lab:</p>
+                                <ul>
+                                    <li>
+                                        <p>Microsoft Edge</p>
+                                    </li>
+                                    <li>
+                                        <p>File Explorer</p>
+                                    </li>
+                                    <li>
+                                        <p>Windows PowerShell</p>
+                                    </li>
+                                    <li>
+                                        <p>Visual Studio Code</p>
+                                    </li>
+                                </ul>
+                                <h3
+                                    id="exercise-1-build-a-back-end-api-by-using-azure-storage-and-the-web-apps-feature-of-azure-app-service">
+                                    Exercise 1: Build a back-end API by using Azure Storage and the Web Apps feature of
+                                    Azure App Service</h3>
+                                <h4 id="task-1-open-the-azure-portal">Task 1: Open the Azure portal</h4>
+                                <ol>
+                                    <li>
+                                        <p>Sign in to the Azure portal (<a
+                                                href="https://portal.azure.com/">https://portal.azure.com</a>).</p>
+                                        <blockquote>
+                                            <p><strong>Note</strong>: If this is your first time signing in to the Azure
+                                                portal, a dialog box will display offering a tour of the portal. Select
+                                                <strong>Get Started</strong> to skip the tour.</p>
+                                        </blockquote>
+                                    </li>
+                                </ol>
+                                <h4 id="task-2-create-a-storage-account">Task 2: Create a Storage account</h4>
+                                <ol>
+                                    <li>
+                                        <p>Create a new storage account with the following details:</p>
+                                        <ul>
+                                            <li>
+                                                <p>New resource group: <strong>ManagedPlatform</strong></p>
+                                            </li>
+                                            <li>
+                                                <p>Name: <strong>imgstor*[yourname]*</strong></p>
+                                            </li>
+                                            <li>
+                                                <p>Location: <strong>(US) East US</strong></p>
+                                            </li>
+                                            <li>
+                                                <p>Performance: <strong>Standard</strong></p>
+                                            </li>
+                                            <li>
+                                                <p>Account kind: <strong>StorageV2 (general purpose v2)</strong></p>
+                                            </li>
+                                            <li>
+                                                <p>Replication: <strong>Locally-redundant storage (LRS)</strong></p>
+                                            </li>
+                                            <li>
+                                                <p>Access tier: <strong>Hot</strong></p>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <p>Wait for Azure to finish creating the storage account before you move forward
+                                            with the lab. You'll receive a notification when the account is created.</p>
+                                    </li>
+                                    <li>
+                                        <p>Access the <strong>Access Keys</strong> blade of your newly created storage
+                                            account instance.</p>
+                                    </li>
+                                    <li>
+                                        <p>Record the value of the <strong>Connection string</strong> text box. You'll
+                                            use this value later in this lab.</p>
+                                    </li>
+                                </ol>
+                                <h4 id="task-3-upload-a-sample-blob">Task 3: Upload a sample blob</h4>
+                                <ol>
+                                    <li>
+                                        <p>Access the <strong>imgstor*[yourname]*</strong> storage account that you
+                                            created earlier in this lab.</p>
+                                    </li>
+                                    <li>
+                                        <p>In the <strong>Blob service</strong> section, select the
+                                            <strong>Containers</strong> link.</p>
+                                    </li>
+                                    <li>
+                                        <p>Create a new <strong>container</strong> with the following settings:</p>
+                                        <ul>
+                                            <li>
+                                                <p>Name: <strong>images</strong></p>
+                                            </li>
+                                            <li>
+                                                <p>Public access level: <strong>Blob (anonymous read access for blobs
+                                                        only)</strong></p>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <p>Go to the new <strong>images</strong> container, and then use the
+                                            <strong>Upload</strong> button to upload the
+                                            <strong>grilledcheese.jpg</strong> file in the <strong>Allfiles
+                                                (F):\Allfiles\Labs\01\Starter\Images</strong> folder on your lab
+                                            machine.</p>
+                                        <blockquote>
+                                            <p><strong>Note</strong>: We recommended that you enable the
+                                                <strong>Overwrite if files already exist</strong> option.</p>
+                                        </blockquote>
+                                    </li>
+                                </ol>
+                                <h4 id="task-4-create-a-web-app">Task 4: Create a web app</h4>
+                                <ol>
+                                    <li>
+                                        <p>Create a new web app with the following details:</p>
+                                        <ul>
+                                            <li>
+                                                <p>Existing resource group: <strong>ManagedPlatform</strong></p>
+                                            </li>
+                                            <li>
+                                                <p>Web App name: <strong>imgapi*[yourname]*</strong></p>
+                                            </li>
+                                            <li>
+                                                <p>Publish: <strong>Code</strong></p>
+                                            </li>
+                                            <li>
+                                                <p>Runtime stack: <strong>.NET Core 3.1 (LTS)</strong></p>
+                                            </li>
+                                            <li>
+                                                <p>Operating System: <strong>Windows</strong></p>
+                                            </li>
+                                            <li>
+                                                <p>Region: <strong>East US</strong></p>
+                                            </li>
+                                            <li>
+                                                <p>New App Service plan: <strong>ManagedPlan</strong></p>
+                                            </li>
+                                            <li>
+                                                <p>SKU and size: <strong>Standard (S1)</strong></p>
+                                            </li>
+                                            <li>
+                                                <p>Application Insights: <strong>Disabled</strong></p>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <p>Wait for Azure to finish creating the web app before you move forward with
+                                            the lab. You'll receive a notification when the app is created.</p>
+                                    </li>
+                                </ol>
+                                <h4 id="task-5-configure-the-web-app">Task 5: Configure the web app</h4>
+                                <ol>
+                                    <li>
+                                        <p>Access the <strong>imgapi*[yourname]*</strong> web app that you created
+                                            earlier in this lab.</p>
+                                    </li>
+                                    <li>
+                                        <p>In the <strong>Settings</strong> section, find the
+                                            <strong>Configuration</strong> section, and then create a new application
+                                            setting by using the following details:</p>
+                                        <ul>
+                                            <li>
+                                                <p>Name: <strong>StorageConnectionString</strong></p>
+                                            </li>
+                                            <li>
+                                                <p>Value: <strong><em>Storage Connection String copied earlier in this
+                                                            lab</em></strong></p>
+                                            </li>
+                                            <li>
+                                                <p>Deployment slot setting: <strong>Not selected</strong></p>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <p>Save your changes to the application settings.</p>
+                                    </li>
+                                    <li>
+                                        <p>In the <strong>Settings</strong> section, find the
+                                            <strong>Properties</strong> section.</p>
+                                    </li>
+                                    <li>
+                                        <p>In the <strong>Properties</strong> section, copy the value of the
+                                            <strong>URL</strong> text box. You'll use this value later in the lab.</p>
+                                        <blockquote>
+                                            <p><strong>Note</strong>: At this point, the web server at this URL will
+                                                return a 404 error. You have not deployed any code to the Web App yet.
+                                                You will deploy code to the Web App later in this lab.</p>
+                                        </blockquote>
+                                    </li>
+                                </ol>
+                                <h4 id="task-6-deploy-an-aspnet-web-application-to-web-apps">Task 6: Deploy an ASP.NET
+                                    web application to Web Apps</h4>
+                                <ol>
+                                    <li>
+                                        <p>Using Visual Studio Code, open the web application in the <strong>Allfiles
+                                                (F):\Allfiles\Labs\01\Starter\API</strong> folder.</p>
+                                    </li>
+                                    <li>
+                                        <p>Open the <strong>Controllers\ImagesController.cs</strong> file, and then
+                                            observe the code in each of the methods.</p>
+                                    </li>
+                                    <li>
+                                        <p>Open the Windows Terminal application.</p>
+                                    </li>
+                                    <li>
+                                        <p>Sign in to the Azure CLI by using your Azure credentials:</p>
+                                        <pre><code class="prettyprint prettyprinted" tabindex="0" style=""><span class="pln">az login</span></code></pre>
+                                    </li>
+                                    <li>
+                                        <p>List all the apps in your <strong>ManagedPlatform</strong> resource group:
+                                        </p>
+                                        <pre><code class="prettyprint prettyprinted" tabindex="0" style=""><span class="pln">az webapp list </span><span class="pun">--</span><span class="pln">resource</span><span class="pun">-</span><span class="kwd">group</span><span class="pln"> </span><span class="typ">ManagedPlatform</span></code></pre>
+                                    </li>
+                                    <li>
+                                        <p>Find the apps that have the <strong>imgapi*</strong> prefix:</p>
+                                        <pre><code class="prettyprint prettyprinted" tabindex="0" style=""><span class="pln">az webapp list </span><span class="pun">--</span><span class="pln">resource</span><span class="pun">-</span><span class="kwd">group</span><span class="pln"> </span><span class="typ">ManagedPlatform</span><span class="pln"> </span><span class="pun">--</span><span class="pln">query </span><span class="str">"[?starts_with(name, 'imgapi')]"</span></code></pre>
+                                    </li>
+                                    <li>
+                                        <p>Print only the name of the single app that has the <strong>imgapi*</strong>
+                                            prefix:</p>
+                                        <pre><code class="prettyprint prettyprinted" tabindex="0" style=""><span class="pln">az webapp list </span><span class="pun">--</span><span class="pln">resource</span><span class="pun">-</span><span class="kwd">group</span><span class="pln"> </span><span class="typ">ManagedPlatform</span><span class="pln"> </span><span class="pun">--</span><span class="pln">query </span><span class="str">"[?starts_with(name, 'imgapi')].{Name:name}"</span><span class="pln"> </span><span class="pun">--</span><span class="pln">output tsv</span></code></pre>
+                                    </li>
+                                    <li>
+                                        <p>Change the current directory to the <strong>Allfiles
+                                                (F):\Allfiles\Labs\01\Starter\API</strong> directory that contains the
+                                            lab files:</p>
+                                        <pre><code class="prettyprint prettyprinted" tabindex="0" style=""><span class="pln">cd F</span><span class="pun">:</span><span class="pln">\Allfiles\Labs\0</span><span class="lit">1</span><span class="pln">\Starter\API\</span></code></pre>
+                                    </li>
+                                    <li>
+                                        <p>Deploy the <strong>api.zip</strong> file to the web app that you created
+                                            earlier in this lab:</p>
+                                        <pre><code class="prettyprint prettyprinted" tabindex="0" style=""><span class="pln">az webapp deployment source config</span><span class="pun">-</span><span class="pln">zip </span><span class="pun">--</span><span class="pln">resource</span><span class="pun">-</span><span class="kwd">group</span><span class="pln"> </span><span class="typ">ManagedPlatform</span><span class="pln"> </span><span class="pun">--</span><span class="pln">src api</span><span class="pun">.</span><span class="pln">zip </span><span class="pun">--</span><span class="pln">name </span><span class="pun">&lt;</span><span class="pln">name</span><span class="pun">-</span><span class="kwd">of</span><span class="pun">-</span><span class="pln">your</span><span class="pun">-</span><span class="pln">api</span><span class="pun">-</span><span class="pln">app</span><span class="pun">&gt;</span></code></pre>
+                                        <blockquote>
+                                            <p><strong>Note</strong>: Replace the <em>\<name-of-your-api-app>
+                                                    </name-of-your-api-app></em> placeholder with the name of the web
+                                                app that you created earlier in this lab. You recently queried this
+                                                app’s name in the previous steps.</p>
+                                        </blockquote>
+                                    </li>
+                                    <li>
+                                        <p>Access the <strong>imgapi*[yourname]<em></em></strong><em> web app that you
+                                                created earlier in this lab. Open the
+                                                <strong>imgapi</strong></em><strong>[yourname]*</strong> web app in your
+                                            browser.</p>
+                                    </li>
+                                    <li>
+                                        <p>Perform a GET request to the root of the website, and then observe the
+                                            JavaScript Object Notation (JSON) array that's returned. This array should
+                                            contain the URL for your single uploaded image in your storage account.</p>
+                                    </li>
+                                    <li>
+                                        <p>Close the currently running Visual Studio Code and Windows Terminal
+                                            applications.</p>
+                                    </li>
+                                </ol>
+                                <h4 id="review">Review</h4>
+                                <p>In this exercise, you created a web app in Azure and then deployed your ASP.NET web
+                                    application to Web Apps by using the Azure CLI and the Kudu zip file deployment
+                                    utility.</p>
+                                <h3 id="exercise-2-build-a-front-end-web-application-by-using-azure-web-apps">Exercise
+                                    2: Build a front-end web application by using Azure Web Apps</h3>
+                                <h4 id="task-1-create-a-web-app">Task 1: Create a web app</h4>
+                                <ol>
+                                    <li>
+                                        <p>In the Azure portal, create a new web app with the following details:</p>
+                                        <ul>
+                                            <li>
+                                                <p>Existing resource group: <strong>ManagedPlatform</strong></p>
+                                            </li>
+                                            <li>
+                                                <p>Web app name: <strong>imgweb*[yourname]*</strong></p>
+                                            </li>
+                                            <li>
+                                                <p>Publish: <strong>Code</strong></p>
+                                            </li>
+                                            <li>
+                                                <p>Runtime stack: <strong>.NET Core 3.1 (LTS)</strong></p>
+                                            </li>
+                                            <li>
+                                                <p>Operating system: <strong>Windows</strong></p>
+                                            </li>
+                                            <li>
+                                                <p>Region: <strong>East US</strong></p>
+                                            </li>
+                                            <li>
+                                                <p>Existing App Service plan: <strong>ManagedPlan</strong></p>
+                                            </li>
+                                            <li>
+                                                <p>Application Insights: <strong>Disabled</strong></p>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <p>Wait for Azure to finish creating the web app before you move forward with
+                                            the lab. You'll receive a notification when the app is created.</p>
+                                    </li>
+                                </ol>
+                                <h4 id="task-2-configure-a-web-app">Task 2: Configure a web app</h4>
+                                <ol>
+                                    <li>
+                                        <p>Access the <strong>imgweb*[yourname]*</strong> web app that you created in
+                                            the previous task.</p>
+                                    </li>
+                                    <li>
+                                        <p>In the <strong>Settings</strong> section, find the
+                                            <strong>Configuration</strong> settings.</p>
+                                    </li>
+                                    <li>
+                                        <p>Create a new application setting by using the following details:</p>
+                                        <ul>
+                                            <li>
+                                                <p>Name: <strong>ApiUrl</strong></p>
+                                            </li>
+                                            <li>
+                                                <p>Value: <strong><em>Web app URL copied earlier in this
+                                                            lab</em></strong></p>
+                                            </li>
+                                            <li>
+                                                <p>Deployment slot setting: <strong>Not selected</strong></p>
+                                            </li>
+                                        </ul>
+                                        <blockquote>
+                                            <p><strong>Note</strong>: Make sure you include the protocol, such as
+                                                <strong>https://</strong>, in the URL that you copy into the
+                                                <strong>Value</strong> text box for this application setting.</p>
+                                        </blockquote>
+                                    </li>
+                                    <li>
+                                        <p>Save your changes to the application settings.</p>
+                                    </li>
+                                </ol>
+                                <h4 id="task-3-deploy-an-aspnet-web-application-to-web-apps">Task 3: Deploy an ASP.NET
+                                    web application to Web Apps</h4>
+                                <ol>
+                                    <li>
+                                        <p>Using Visual Studio Code, open the web application in the <strong>Allfiles
+                                                (F):\Allfiles\Labs\01\Starter\Web</strong> folder.</p>
+                                    </li>
+                                    <li>
+                                        <p>Open the <strong>Pages\Index.cshtml.cs</strong> file, and then observe the
+                                            code in each of the methods.</p>
+                                    </li>
+                                    <li>
+                                        <p>Open the Windows Terminal application, and then sign in to the Azure CLI by
+                                            using your Azure credentials:</p>
+                                        <pre><code class="prettyprint prettyprinted" tabindex="0" style=""><span class="pln">az login</span></code></pre>
+                                    </li>
+                                    <li>
+                                        <p>List all the apps in your <strong>ManagedPlatform</strong> resource group:
+                                        </p>
+                                        <pre><code class="prettyprint prettyprinted" tabindex="0" style=""><span class="pln">az webapp list </span><span class="pun">--</span><span class="pln">resource</span><span class="pun">-</span><span class="kwd">group</span><span class="pln"> </span><span class="typ">ManagedPlatform</span></code></pre>
+                                    </li>
+                                    <li>
+                                        <p>Find the apps that have the <strong>imgweb*</strong> prefix:</p>
+                                        <pre><code class="prettyprint prettyprinted" tabindex="0" style=""><span class="pln">az webapp list </span><span class="pun">--</span><span class="pln">resource</span><span class="pun">-</span><span class="kwd">group</span><span class="pln"> </span><span class="typ">ManagedPlatform</span><span class="pln"> </span><span class="pun">--</span><span class="pln">query </span><span class="str">"[?starts_with(name, 'imgweb')]"</span></code></pre>
+                                    </li>
+                                    <li>
+                                        <p>Print only the name of the single app that has the <strong>imgweb*</strong>
+                                            prefix:</p>
+                                        <pre><code class="prettyprint prettyprinted" tabindex="0" style=""><span class="pln">az webapp list </span><span class="pun">--</span><span class="pln">resource</span><span class="pun">-</span><span class="kwd">group</span><span class="pln"> </span><span class="typ">ManagedPlatform</span><span class="pln"> </span><span class="pun">--</span><span class="pln">query </span><span class="str">"[?starts_with(name, 'imgweb')].{Name:name}"</span><span class="pln"> </span><span class="pun">--</span><span class="pln">output tsv</span></code></pre>
+                                    </li>
+                                    <li>
+                                        <p>Change your current directory to the <strong>Allfiles
+                                                (F):\Allfiles\Labs\01\Starter\Web</strong> directory that contains the
+                                            lab files:</p>
+                                        <pre><code class="prettyprint prettyprinted" tabindex="0" style=""><span class="pln">cd F</span><span class="pun">:</span><span class="pln">\Allfiles\Labs\0</span><span class="lit">1</span><span class="pln">\Starter\Web\</span></code></pre>
+                                    </li>
+                                    <li>
+                                        <p>Deploy the <strong>web.zip</strong> file to the web app that you created
+                                            earlier in this lab:</p>
+                                        <pre><code class="prettyprint prettyprinted" tabindex="0" style=""><span class="pln">az webapp deployment source config</span><span class="pun">-</span><span class="pln">zip </span><span class="pun">--</span><span class="pln">resource</span><span class="pun">-</span><span class="kwd">group</span><span class="pln"> </span><span class="typ">ManagedPlatform</span><span class="pln"> </span><span class="pun">--</span><span class="pln">src web</span><span class="pun">.</span><span class="pln">zip </span><span class="pun">--</span><span class="pln">name </span><span class="pun">&lt;</span><span class="pln">name</span><span class="pun">-</span><span class="kwd">of</span><span class="pun">-</span><span class="pln">your</span><span class="pun">-</span><span class="pln">web</span><span class="pun">-</span><span class="pln">app</span><span class="pun">&gt;</span></code></pre>
+                                        <blockquote>
+                                            <p><strong>Note</strong>: Replace the <em>\<name-of-your-web-app>
+                                                    </name-of-your-web-app></em> placeholder with the name of the web
+                                                app that you created earlier in this lab. You recently queried this
+                                                app’s name in the previous steps.</p>
+                                        </blockquote>
+                                    </li>
+                                    <li>
+                                        <p>Access the <strong>imgweb*[yourname]<em></em></strong><em> web app that you
+                                                created earlier in this lab. Open the
+                                                <strong>imgweb</strong></em><strong>[yourname]*</strong> web app in your
+                                            browser.</p>
+                                    </li>
+                                    <li>
+                                        <p>From the <strong>Contoso Photo Gallery</strong> webpage, find the
+                                            <strong>Upload a new image</strong> section, and then upload the
+                                            <strong>bahnmi.jpg</strong> file in the <strong>Allfiles
+                                                (F):\Allfiles\Labs\01\Starter\Images</strong> folder on your lab
+                                            machine.</p>
+                                        <blockquote>
+                                            <p><strong>Note</strong>: Ensure you click the <strong>Upload</strong>
+                                                button to upload the image to Azure.</p>
+                                        </blockquote>
+                                    </li>
+                                    <li>
+                                        <p>Observe that the list of gallery images has updated with your new image.</p>
+                                        <blockquote>
+                                            <p><strong>Note</strong>: In some rare cases, you might need to refresh your
+                                                browser window to retrieve the new image.</p>
+                                        </blockquote>
+                                    </li>
+                                    <li>
+                                        <p>Close the currently running Visual Studio Code and Windows Terminal
+                                            applications.</p>
+                                    </li>
+                                </ol>
+                                <h4 id="review-1">Review</h4>
+                                <p>In this exercise, you created an Azure web app and deployed an existing web
+                                    application’s code to the resource in the cloud.</p>
+                                <h3 id="exercise-3-clean-up-your-subscription">Exercise 3: Clean up your subscription
+                                </h3>
+                                <h4 id="task-1-open-azure-cloud-shell">Task 1: Open Azure Cloud Shell</h4>
+                                <ol>
+                                    <li>
+                                        <p>In the Azure portal, select the <strong>Cloud Shell</strong> icon to open a
+                                            new shell instance.</p>
+                                    </li>
+                                    <li>
+                                        <p>If Cloud Shell isn't already configured, configure the shell for Bash by
+                                            using the default settings.</p>
+                                    </li>
+                                </ol>
+                                <h4 id="task-2-delete-resource-groups">Task 2: Delete resource groups</h4>
+                                <ol>
+                                    <li>
+                                        <p>Enter the following command, and then select Enter to delete the
+                                            <strong>ManagedPlatform</strong> resource group:</p>
+                                        <pre><code class="prettyprint prettyprinted" tabindex="0" style=""><span class="pln">az </span><span class="kwd">group</span><span class="pln"> </span><span class="kwd">delete</span><span class="pln"> </span><span class="pun">--</span><span class="pln">name </span><span class="typ">ManagedPlatform</span><span class="pln"> </span><span class="pun">--</span><span class="kwd">no</span><span class="pun">-</span><span class="pln">wait </span><span class="pun">--</span><span class="pln">yes</span></code></pre>
+                                    </li>
+                                    <li>
+                                        <p>Close the Cloud Shell pane in the portal.</p>
+                                    </li>
+                                </ol>
+                                <h4 id="task-3-close-the-active-applications">Task 3: Close the active applications</h4>
+                                <ul>
+                                    <li>Close the currently running Microsoft Edge application.</li>
+                                </ul>
+                                <h4 id="review-2">Review</h4>
+                                <p>In this exercise, you cleaned up your subscription by removing the resource groups
+                                    used in this lab.</p>
+                            </include>
+                            <hr>
+                            <h3 id="congratulations">Congratulations!</h3>
+                            <p>You have successfully completed this exercise. Click <strong>End</strong> to advance to
+                                the next exercise.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <style id="design-studio-animate">
+        .designstudio-animated {
+            -webkit-animation-duration: .5s;
+            animation-duration: .5s;
+            -webkit-animation-fill-mode: both;
+            animation-fill-mode: both;
+        }
+
+        @keyframes designstudio-fadeOut {
+            from {
+                opacity: 1;
+            }
+
+            to {
+                opacity: 0;
+            }
+        }
+
+        .designstudio-fadeOut {
+            animation-name: designstudio-fadeOut;
+        }
+
+        @-webkit-keyframes designstudio-fadeInUp {
+            from {
+                opacity: 0;
+                -webkit-transform: translate3d(0, 100%, 0);
+                transform: translate3d(0, 100%, 0);
+            }
+
+            to {
+                opacity: 1;
+                -webkit-transform: none;
+                transform: none;
+            }
+        }
+
+        @keyframes designstudio-fadeInUp {
+            from {
+                opacity: 0;
+                -webkit-transform: translate3d(0, 100%, 0);
+                transform: translate3d(0, 100%, 0);
+            }
+
+            to {
+                opacity: 1;
+                -webkit-transform: none;
+                transform: none;
+            }
+        }
+
+        .designstudio-fadeInUp {
+            -webkit-animation-name: designstudio-fadeInUp;
+            animation-name: designstudio-fadeInUp;
+        }
+
+        @-webkit-keyframes designstudio-fadeInDown {
+            from {
+                opacity: 0;
+                -webkit-transform: translate3d(0, -100%, 0);
+                transform: translate3d(0, -100%, 0);
+            }
+
+            to {
+                opacity: 1;
+                -webkit-transform: none;
+                transform: none;
+            }
+        }
+
+        @keyframes designstudio-fadeInDown {
+            from {
+                opacity: 0;
+                -webkit-transform: translate3d(0, -100%, 0);
+                transform: translate3d(0, -100%, 0);
+            }
+
+            to {
+                opacity: 1;
+                -webkit-transform: none;
+                transform: none;
+            }
+        }
+
+        .designstudio-fadeInDown {
+            -webkit-animation-name: designstudio-fadeInDown;
+            animation-name: designstudio-fadeInDown;
+        }
+
+        @-webkit-keyframes designstudio-fadeInLeft {
+            from {
+                opacity: 0;
+                -webkit-transform: translate3d(-100%, 0, 0);
+                transform: translate3d(-100%, 0, 0);
+            }
+
+            to {
+                opacity: 1;
+                -webkit-transform: none;
+                transform: none;
+            }
+        }
+
+        @keyframes designstudio-fadeInLeft {
+            from {
+                opacity: 0;
+                -webkit-transform: translate3d(-100%, 0, 0);
+                transform: translate3d(-100%, 0, 0);
+            }
+
+            to {
+                opacity: 1;
+                -webkit-transform: none;
+                transform: none;
+            }
+        }
+
+        .designstudio-fadeInLeft {
+            -webkit-animation-name: designstudio-fadeInLeft;
+            animation-name: designstudio-fadeInLeft;
+        }
+
+        @-webkit-keyframes designstudio-fadeInRight {
+            from {
+                opacity: 0;
+                -webkit-transform: translate3d(100%, 0, 0);
+                transform: translate3d(100%, 0, 0);
+            }
+
+            to {
+                opacity: 1;
+                -webkit-transform: none;
+                transform: none;
+            }
+        }
+
+        @keyframes designstudio-fadeInRight {
+            from {
+                opacity: 0;
+                -webkit-transform: translate3d(100%, 0, 0);
+                transform: translate3d(100%, 0, 0);
+            }
+
+            to {
+                opacity: 1;
+                -webkit-transform: none;
+                transform: none;
+            }
+        }
+
+        .designstudio-fadeInRight {
+            -webkit-animation-name: designstudio-fadeInRight;
+            animation-name: designstudio-fadeInRight;
+        }
+
+        @-webkit-keyframes designstudio-fadeOutUp {
+            from {
+                opacity: 1;
+            }
+
+            to {
+                opacity: 0;
+                -webkit-transform: translate3d(0, -100%, 0);
+                transform: translate3d(0, -100%, 0);
+            }
+        }
+
+        @keyframes designstudio-fadeOutUp {
+            from {
+                opacity: 1;
+            }
+
+            to {
+                opacity: 0;
+                -webkit-transform: translate3d(0, -100%, 0);
+                transform: translate3d(0, -100%, 0);
+            }
+        }
+
+        .designstudio-fadeOutUp {
+            -webkit-animation-name: designstudio-fadeOutUp;
+            animation-name: designstudio-fadeOutUp;
+        }
+
+        @-webkit-keyframes designstudio-fadeOutDown {
+            from {
+                opacity: 1;
+            }
+
+            to {
+                opacity: 0;
+                -webkit-transform: translate3d(0, 100%, 0);
+                transform: translate3d(0, 100%, 0);
+            }
+        }
+
+        @keyframes designstudio-fadeOutDown {
+            from {
+                opacity: 1;
+            }
+
+            to {
+                opacity: 0;
+                -webkit-transform: translate3d(0, 100%, 0);
+                transform: translate3d(0, 100%, 0);
+            }
+        }
+
+        .designstudio-fadeOutDown {
+            -webkit-animation-name: designstudio-fadeOutDown;
+            animation-name: designstudio-fadeOutDown;
+        }
+
+        @-webkit-keyframes designstudio-fadeOutLeft {
+            from {
+                opacity: 1;
+            }
+
+            to {
+                opacity: 0;
+                -webkit-transform: translate3d(-100%, 0, 0);
+                transform: translate3d(-100%, 0, 0);
+            }
+        }
+
+        @keyframes designstudio-fadeOutLeft {
+            from {
+                opacity: 1;
+            }
+
+            to {
+                opacity: 0;
+                -webkit-transform: translate3d(-100%, 0, 0);
+                transform: translate3d(-100%, 0, 0);
+            }
+        }
+
+        .designstudio-fadeOutLeft {
+            -webkit-animation-name: designstudio-fadeOutLeft;
+            animation-name: designstudio-fadeOutLeft;
+        }
+
+        @-webkit-keyframes designstudio-fadeOutRight {
+            from {
+                opacity: 1;
+            }
+
+            to {
+                opacity: 0;
+                -webkit-transform: translate3d(100%, 0, 0);
+                transform: translate3d(100%, 0, 0);
+            }
+        }
+
+        @keyframes designstudio-fadeOutRight {
+            from {
+                opacity: 1;
+            }
+
+            to {
+                opacity: 0;
+                -webkit-transform: translate3d(100%, 0, 0);
+                transform: translate3d(100%, 0, 0);
+            }
+        }
+
+        .designstudio-fadeOutRight {
+            -webkit-animation-name: designstudio-fadeOutRight;
+            animation-name: designstudio-fadeOutRight;
+        }
+
+        @-webkit-keyframes designstudio-slideInDown {
+            from {
+                -webkit-transform: translate3d(0, -100%, 0);
+                transform: translate3d(0, -100%, 0);
+                visibility: visible;
+            }
+
+            to {
+                -webkit-transform: translate3d(0, 0, 0);
+                transform: translate3d(0, 0, 0);
+            }
+        }
+
+        @keyframes designstudio-slideInDown {
+            from {
+                -webkit-transform: translate3d(0, -100%, 0);
+                transform: translate3d(0, -100%, 0);
+                visibility: visible;
+            }
+
+            to {
+                -webkit-transform: translate3d(0, 0, 0);
+                transform: translate3d(0, 0, 0);
+            }
+        }
+
+        .designstudio-slideInDown {
+            -webkit-animation-name: designstudio-slideInDown;
+            animation-name: designstudio-slideInDown;
+        }
+
+        @-webkit-keyframes designstudio-slideInLeft {
+            from {
+                -webkit-transform: translate3d(-100%, 0, 0);
+                transform: translate3d(-100%, 0, 0);
+                visibility: visible;
+            }
+
+            to {
+                -webkit-transform: translate3d(0, 0, 0);
+                transform: translate3d(0, 0, 0);
+            }
+        }
+
+        @keyframes designstudio-slideInLeft {
+            from {
+                -webkit-transform: translate3d(-100%, 0, 0);
+                transform: translate3d(-100%, 0, 0);
+                visibility: visible;
+            }
+
+            to {
+                -webkit-transform: translate3d(0, 0, 0);
+                transform: translate3d(0, 0, 0);
+            }
+        }
+
+        .designstudio-slideInLeft {
+            -webkit-animation-name: designstudio-slideInLeft;
+            animation-name: designstudio-slideInLeft;
+        }
+
+        @-webkit-keyframes designstudio-slideInRight {
+            from {
+                -webkit-transform: translate3d(100%, 0, 0);
+                transform: translate3d(100%, 0, 0);
+                visibility: visible;
+            }
+
+            to {
+                -webkit-transform: translate3d(0, 0, 0);
+                transform: translate3d(0, 0, 0);
+            }
+        }
+
+        @keyframes designstudio-slideInRight {
+            from {
+                -webkit-transform: translate3d(100%, 0, 0);
+                transform: translate3d(100%, 0, 0);
+                visibility: visible;
+            }
+
+            to {
+                -webkit-transform: translate3d(0, 0, 0);
+                transform: translate3d(0, 0, 0);
+            }
+        }
+
+        .designstudio-slideInRight {
+            -webkit-animation-name: designstudio-slideInRight;
+            animation-name: designstudio-slideInRight;
+        }
+
+        @-webkit-keyframes designstudio-slideInUp {
+            from {
+                -webkit-transform: translate3d(0, 100%, 0);
+                transform: translate3d(0, 100%, 0);
+                visibility: visible;
+            }
+
+            to {
+                -webkit-transform: translate3d(0, 0, 0);
+                transform: translate3d(0, 0, 0);
+            }
+        }
+
+        @keyframes designstudio-slideInUp {
+            from {
+                -webkit-transform: translate3d(0, 100%, 0);
+                transform: translate3d(0, 100%, 0);
+                visibility: visible;
+            }
+
+            to {
+                -webkit-transform: translate3d(0, 0, 0);
+                transform: translate3d(0, 0, 0);
+            }
+        }
+
+        .designstudio-slideInUp {
+            -webkit-animation-name: designstudio-slideInUp;
+            animation-name: designstudio-slideInUp;
+        }
+
+        .designstudio-button:focus {
+            outline: 2px solid #757575;
+        }
+    </style>
+</body>
+
+</html>
