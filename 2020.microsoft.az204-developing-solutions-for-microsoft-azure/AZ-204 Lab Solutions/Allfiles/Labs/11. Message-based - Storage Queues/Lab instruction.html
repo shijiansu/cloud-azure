@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <style id="stndz-style"></style>
+    <meta name="viewport" content="width=device-width">
+    <title>Module 11 (CSR): Asynchronously processing messages by using Azure Storage Queues</title>
+</head>
+
+<body class="childClient" data-new-gr-c-s-check-loaded="14.984.0" data-gr-ext-installed="">
+    <div id="labClient" style="">
+        <div id="tabs" role="main">
+            <div id="instructionsTab" class="tab selected">
+                <div id="instructionsContent" class="tabContent withFooter instructions withTaskProgress withNavigation"
+                    aria-label="Lab Instructions">
+                    <div class="zoomable" id="pages" style="transform: scale(1); width: 100%;">
+                        <div class="page selected" id="page1">
+                            <p></p>
+                            <blockquote class="alert">
+                                <p><strong>Do not</strong> click nested Typetext icons. Doing so will produce the wrong
+                                    output.</p>
+                                <!--ALERT-->
+                                <p>
+                                    <img src="./oftqjqbo.jpg" alt="oftqjqbo.jpg"></p>
+                            </blockquote>
+                            <include src="https://raw.githubusercontent.com/LODSContent/All-MOC/master/MOC/SkipCleanUp"
+                                data-name="">
+                                <blockquote class="knowledge">
+                                    <p>At the end of this lab, you can skip the <strong>Clean Up</strong> exercise
+                                        directing you to remove the resources from your Subscription or Resource
+                                        Group(s). The clean up is handled automatically, after ending your lab.</p>
+                                </blockquote>
+                                <div class="moreKnowledge"><a
+                                        href="https://labclient.labondemand.com/Instructions/d00b648e-cea7-4f59-af57-03cbd9511602?rc=10#"
+                                        class="moreKnowledgeLink" style="display: none;">more...</a></div>
+                            </include>
+                            <include
+                                src="https://raw.githubusercontent.com/MicrosoftLearning/AZ-204-DevelopingSolutionsforMicrosoftAzure/master/Instructions/Labs/AZ-204_11_lab.md"
+                                data-name="">
+                                <h1 id="lab-asynchronously-processing-messages-by-using-azure-queue-storage">Lab:
+                                    Asynchronously processing messages by using Azure Queue Storage</h1>
+                                <h1 id="student-lab-manual">Student lab manual</h1>
+                                <h2 id="lab-scenario">Lab scenario</h2>
+                                <p>You're studying various ways to communicate between isolated service components in
+                                    Microsoft Azure, and you have decided to evaluate the Azure Storage service and its
+                                    Queue service offering. As part of this evaluation, you'll build a prototype
+                                    application in .NET that can send and receive messages so that you can measure the
+                                    complexity involved in using this service. To help you with your evaluation, you've
+                                    also decided to use Azure Storage Explorer as the queue message producer/consumer
+                                    throughout your tests.</p>
+                                <h2 id="objectives">Objectives</h2>
+                                <p>After you complete this lab, you will be able to:</p>
+                                <ul>
+                                    <li>
+                                        <p>Add <strong>Azure.Storage</strong> libraries from NuGet.</p>
+                                    </li>
+                                    <li>
+                                        <p>Create a queue in .NET.</p>
+                                    </li>
+                                    <li>
+                                        <p>Produce a new message in the queue by using .NET.</p>
+                                    </li>
+                                    <li>
+                                        <p>Consume a message from the queue by using .NET.</p>
+                                    </li>
+                                    <li>
+                                        <p>Manage a queue by using Storage Explorer.</p>
+                                    </li>
+                                </ul>
+                                <h2 id="lab-setup">Lab setup</h2>
+                                <ul>
+                                    <li>Estimated time: <strong>45 minutes</strong></li>
+                                </ul>
+                                <h2 id="instructions">Instructions</h2>
+                                <h3 id="before-you-start">Before you start</h3>
+                                <h4 id="sign-in-to-the-lab-virtual-machine">Sign in to the lab virtual machine</h4>
+                                <p>Ensure that you're signed in to your Windows 10 virtual machine by using the
+                                    following credentials:</p>
+                                <ul>
+                                    <li>
+                                        <p>Username: <strong>Admin</strong></p>
+                                    </li>
+                                    <li>
+                                        <p>Password: <strong>Pa55w.rd</strong></p>
+                                    </li>
+                                </ul>
+                                <h4 id="review-the-installed-applications">Review the installed applications</h4>
+                                <p>Find the taskbar on your Windows 10 desktop. The taskbar contains the icons for the
+                                    applications that you'll use in this lab:</p>
+                                <ul>
+                                    <li>
+                                        <p>Microsoft Edge</p>
+                                    </li>
+                                    <li>
+                                        <p>Visual Studio Code</p>
+                                    </li>
+                                    <li>
+                                        <p>Storage Explorer</p>
+                                    </li>
+                                </ul>
+                                <h3 id="exercise-1-create-azure-resources">Exercise 1: Create Azure resources</h3>
+                                <h4 id="task-1-open-the-azure-portal">Task 1: Open the Azure portal</h4>
+                                <ol class="taskList">
+                                    <li class="task-list-item" id="taskIndex2">
+                                        <p><label class="checkbox"><input type="checkbox"
+                                                    aria-labelledby="taskIndex2"><span></span></label>Sign in to the
+                                            Azure portal (<a
+                                                href="https://portal.azure.com/">https://portal.azure.com</a>).</p>
+                                    </li>
+                                    <li class="task-list-item" id="taskIndex3">
+                                        <p><label class="checkbox"><input type="checkbox"
+                                                    aria-labelledby="taskIndex3"><span></span></label>If this is your
+                                            first time signing in to the Azure portal, you'll notice a dialog box
+                                            offering a tour of the portal. Select <strong>Get Started</strong> to skip
+                                            the tour.</p>
+                                    </li>
+                                </ol>
+                                <h4 id="task-2-create-a-storage-account">Task 2: Create a Storage account</h4>
+                                <ol class="taskList">
+                                    <li class="task-list-item" id="taskIndex4">
+                                        <p><label class="checkbox"><input type="checkbox"
+                                                    aria-labelledby="taskIndex4"><span></span></label>Create a new
+                                            storage account with the following details:</p>
+                                        <ul>
+                                            <li>
+                                                <p>New resource group: <strong>AsyncProcessor</strong></p>
+                                            </li>
+                                            <li>
+                                                <p>Name: <strong>asyncstor*[yourname]*</strong></p>
+                                            </li>
+                                            <li>
+                                                <p>Location: <strong>(US) East US</strong></p>
+                                            </li>
+                                            <li>
+                                                <p>Performance: <strong>Standard</strong></p>
+                                            </li>
+                                            <li>
+                                                <p>Account kind: <strong>StorageV2 (general purpose v2)</strong></p>
+                                            </li>
+                                            <li>
+                                                <p>Replication: <strong>Locally-redundant storage (LRS)</strong></p>
+                                            </li>
+                                            <li>
+                                                <p>Access tier: <strong>Hot</strong></p>
+                                            </li>
+                                        </ul>
+                                        <blockquote>
+                                            <p><strong>Note</strong>: Wait for Azure to finish creating the storage
+                                                account before you move forward with the lab. You'll receive a
+                                                notification when the account is created.</p>
+                                        </blockquote>
+                                    </li>
+                                    <li class="task-list-item" id="taskIndex5">
+                                        <p><label class="checkbox"><input type="checkbox"
+                                                    aria-labelledby="taskIndex5"><span></span></label>Find the
+                                            <strong>Access Keys</strong> blade of your newly created storage account
+                                            instance.</p>
+                                    </li>
+                                    <li class="task-list-item" id="taskIndex6">
+                                        <p><label class="checkbox"><input type="checkbox"
+                                                    aria-labelledby="taskIndex6"><span></span></label>Record the value
+                                            of the <strong>Connection string</strong> text box. You'll use this value
+                                            later in this lab.</p>
+                                    </li>
+                                </ol>
+                                <h4 id="review">Review</h4>
+                                <p>In this exercise, you created a new Storage account that you'll use through the
+                                    remainder of the lab.</p>
+                                <h3 id="exercise-2-configure-the-azure-storage-sdk-in-a-net-project">Exercise 2:
+                                    Configure the Azure Storage SDK in a .NET project</h3>
+                                <h4 id="task-1-create-a-net-project">Task 1: Create a .NET project</h4>
+                                <ol class="taskList">
+                                    <li class="task-list-item" id="taskIndex7">
+                                        <p><label class="checkbox"><input type="checkbox"
+                                                    aria-labelledby="taskIndex7"><span></span></label>Using Visual
+                                            Studio Code, open the <strong>Allfiles
+                                                (F):\Allfiles\Labs\11\Starter\MessageProcessor</strong> folder.</p>
+                                    </li>
+                                    <li class="task-list-item" id="taskIndex8">
+                                        <p><label class="checkbox"><input type="checkbox"
+                                                    aria-labelledby="taskIndex8"><span></span></label>Using a terminal,
+                                            create a new .NET project named <strong>MessageProcessor</strong> in the
+                                            current folder:</p>
+                                        <pre><code class="prettyprint prettyprinted" tabindex="0" style=""><span class="pln">dotnet </span><span class="kwd">new</span><span class="pln"> console </span><span class="pun">--</span><span class="pln">name </span><span class="typ">MessageProcessor</span><span class="pln"> </span><span class="pun">--</span><span class="pln">output </span><span class="pun">.</span></code></pre>
+                                        <blockquote>
+                                            <p><strong>Note</strong>: The <strong>dotnet new</strong> command will
+                                                create a new <strong>console</strong> project in a folder with the same
+                                                name as the project.</p>
+                                        </blockquote>
+                                    </li>
+                                    <li class="task-list-item" id="taskIndex9">
+                                        <p><label class="checkbox"><input type="checkbox"
+                                                    aria-labelledby="taskIndex9"><span></span></label>Using the same
+                                            terminal, import version 12.0.0 of <strong>Azure.Storage.Queues</strong>
+                                            from NuGet:</p>
+                                        <pre><code class="prettyprint prettyprinted" tabindex="0" style=""><span class="pln">dotnet </span><span class="kwd">add</span><span class="pln"> </span><span class="kwd">package</span><span class="pln"> </span><span class="typ">Azure</span><span class="pun">.</span><span class="typ">Storage</span><span class="pun">.</span><span class="typ">Queues</span><span class="pln"> </span><span class="pun">--</span><span class="pln">version </span><span class="lit">12.0</span><span class="pun">.</span><span class="lit">0</span></code></pre>
+                                        <blockquote>
+                                            <p><strong>Note</strong>: The <strong>dotnet add package</strong> command
+                                                will add the <strong>Azure.Storage.Queues</strong> package from NuGet.
+                                                For more information, go to <a
+                                                    href="https://www.nuget.org/packages/Azure.Storage.Queues/12.0.0"
+                                                    target="_blank">Azure.Storage.Queues</a>.</p>
+                                        </blockquote>
+                                    </li>
+                                    <li class="task-list-item" id="taskIndex10">
+                                        <p><label class="checkbox"><input type="checkbox"
+                                                    aria-labelledby="taskIndex10"><span></span></label>Using the same
+                                            terminal, build the .NET web application:</p>
+                                        <pre><code class="prettyprint prettyprinted" tabindex="0" style=""><span class="pln">dotnet build</span></code></pre>
+                                    </li>
+                                    <li class="task-list-item" id="taskIndex11">
+                                        <p><label class="checkbox"><input type="checkbox"
+                                                    aria-labelledby="taskIndex11"><span></span></label>Close the current
+                                            terminal.</p>
+                                    </li>
+                                </ol>
+                                <h4 id="task-2-write-code-to-access-azure-storage">Task 2: Write code to access Azure
+                                    Storage</h4>
+                                <ol class="taskList">
+                                    <li class="task-list-item" id="taskIndex12">
+                                        <p><label class="checkbox"><input type="checkbox"
+                                                    aria-labelledby="taskIndex12"><span></span></label>Open the
+                                            <strong>Program.cs</strong> file in Visual Studio Code.</p>
+                                    </li>
+                                    <li class="task-list-item" id="taskIndex13">
+                                        <p><label class="checkbox"><input type="checkbox"
+                                                    aria-labelledby="taskIndex13"><span></span></label>Delete all
+                                            existing code in the <strong>Program.cs</strong> file.</p>
+                                    </li>
+                                    <li class="task-list-item" id="taskIndex14">
+                                        <p><label class="checkbox"><input type="checkbox"
+                                                    aria-labelledby="taskIndex14"><span></span></label>Add the following
+                                            <strong>using</strong> directives for libraries that will be referenced by
+                                            the application:</p>
+                                        <pre><code class="prettyprint prettyprinted" tabindex="0" style=""><span class="kwd">using</span><span class="pln"> </span><span class="typ">Azure</span><span class="pun">;</span><span class="pln">
+</span><span class="kwd">using</span><span class="pln"> </span><span class="typ">Azure</span><span class="pun">.</span><span class="typ">Storage</span><span class="pun">.</span><span class="typ">Queues</span><span class="pun">;</span><span class="pln">
+</span><span class="kwd">using</span><span class="pln"> </span><span class="typ">Azure</span><span class="pun">.</span><span class="typ">Storage</span><span class="pun">.</span><span class="typ">Queues</span><span class="pun">.</span><span class="typ">Models</span><span class="pun">;</span><span class="pln">
+</span><span class="kwd">using</span><span class="pln"> </span><span class="typ">System</span><span class="pun">;</span><span class="pln">
+</span><span class="kwd">using</span><span class="pln"> </span><span class="typ">System</span><span class="pun">.</span><span class="typ">Threading</span><span class="pun">.</span><span class="typ">Tasks</span><span class="pun">;</span></code></pre>
+                                    </li>
+                                    <li class="task-list-item" id="taskIndex15">
+                                        <p><label class="checkbox"><input type="checkbox"
+                                                    aria-labelledby="taskIndex15"><span></span></label>Create a new
+                                            <strong>Program</strong> class with two constant string properties named
+                                            <strong>storageConnectionString</strong> and <strong>messagequeue</strong>,
+                                            and then create an asynchronous <strong>Main</strong> entry point method:
+                                        </p>
+                                        <pre><code class="prettyprint prettyprinted" tabindex="0" style=""><span class="kwd">public</span><span class="pln"> </span><span class="kwd">class</span><span class="pln"> </span><span class="typ">Program</span><span class="pln">
+</span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">private</span><span class="pln"> </span><span class="kwd">const</span><span class="pln"> </span><span class="kwd">string</span><span class="pln"> storageConnectionString </span><span class="pun">=</span><span class="pln"> </span><span class="str">"&lt;storage-connection-string&gt;"</span><span class="pun">;</span><span class="pln">
+    </span><span class="kwd">private</span><span class="pln"> </span><span class="kwd">const</span><span class="pln"> </span><span class="kwd">string</span><span class="pln"> queueName </span><span class="pun">=</span><span class="pln"> </span><span class="str">"messagequeue"</span><span class="pun">;</span><pre><code><span class="kwd">public</span><span class="pln"> </span><span class="kwd">static</span><span class="pln"> </span><span class="kwd">async</span><span class="pln"> </span><span class="typ">Task</span><span class="pln"> </span><span class="typ">Main</span><span class="pun">(</span><span class="kwd">string</span><span class="pun">[]</span><span class="pln"> args</span><span class="pun">)</span><span class="pln">
+</span><span class="pun">{</span><span class="pln">
+</span><span class="pun">}</span><span class="pln">
+</span></code></pre><span class="pun">}</span></code></pre>
+                                    </li>
+                                    <li class="task-list-item" id="taskIndex16">
+                                        <p><label class="checkbox"><input type="checkbox"
+                                                    aria-labelledby="taskIndex16"><span></span></label>Update the
+                                            <strong>storageConnectionString</strong> string constant by setting its
+                                            value to the <strong>Connection string</strong> of the storage account that
+                                            you recorded earlier in this lab.</p>
+                                    </li>
+                                </ol>
+                                <h4 id="task-3-validate-azure-storage-access">Task 3: Validate Azure Storage access</h4>
+                                <ol class="taskList">
+                                    <li class="task-list-item" id="taskIndex17">
+                                        <p><label class="checkbox"><input type="checkbox"
+                                                    aria-labelledby="taskIndex17"><span></span></label>In the
+                                            <strong>Main</strong> method, add the following block of code to connect to
+                                            the storage account and to asynchronously create the queue if it doesn't
+                                            already exist:</p>
+                                        <pre><code class="prettyprint prettyprinted" tabindex="0" style=""><span class="typ">QueueClient</span><span class="pln"> client </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> </span><span class="typ">QueueClient</span><span class="pun">(</span><span class="pln">storageConnectionString</span><span class="pun">,</span><span class="pln"> queueName</span><span class="pun">);</span><span class="pln">        
+</span><span class="kwd">await</span><span class="pln"> client</span><span class="pun">.</span><span class="typ">CreateAsync</span><span class="pun">();</span></code></pre>
+                                    </li>
+                                    <li class="task-list-item" id="taskIndex18">
+                                        <p><label class="checkbox"><input type="checkbox"
+                                                    aria-labelledby="taskIndex18"><span></span></label>Still in the
+                                            <strong>Main</strong> method, add the following block of code to render the
+                                            Uniform Resource Identifier (URI) of the queue endpoint:</p>
+                                        <pre><code class="prettyprint prettyprinted" tabindex="0" style=""><span class="typ">Console</span><span class="pun">.</span><span class="typ">WriteLine</span><span class="pun">(</span><span class="pln">$</span><span class="str">"---Account Metadata---"</span><span class="pun">);</span><span class="pln">
+</span><span class="typ">Console</span><span class="pun">.</span><span class="typ">WriteLine</span><span class="pun">(</span><span class="pln">$</span><span class="str">"Account Uri:\t{client.Uri}"</span><span class="pun">);</span></code></pre>
+                                    </li>
+                                    <li class="task-list-item" id="taskIndex19">
+                                        <p><label class="checkbox"><input type="checkbox"
+                                                    aria-labelledby="taskIndex19"><span></span></label>Save the
+                                            <strong>Program.cs</strong> file.</p>
+                                    </li>
+                                    <li class="task-list-item" id="taskIndex20">
+                                        <p><label class="checkbox"><input type="checkbox"
+                                                    aria-labelledby="taskIndex20"><span></span></label>Using a terminal,
+                                            run the ASP.NET web application project:</p>
+                                        <pre><code class="prettyprint prettyprinted" tabindex="0" style=""><span class="pln">dotnet run</span></code></pre>
+                                        <blockquote>
+                                            <p><strong>Note</strong>: If there are any build errors, review the
+                                                <strong>Program.cs</strong> file in the <strong>Allfiles
+                                                    (F):\Allfiles\Labs\11\Solution\MessageProcessor</strong> folder.</p>
+                                        </blockquote>
+                                    </li>
+                                    <li class="task-list-item" id="taskIndex21">
+                                        <p><label class="checkbox"><input type="checkbox"
+                                                    aria-labelledby="taskIndex21"><span></span></label>Observe the
+                                            output from the currently running console application. The output contains
+                                            metadata for the queue endpoint.</p>
+                                    </li>
+                                    <li class="task-list-item" id="taskIndex22">
+                                        <p><label class="checkbox"><input type="checkbox"
+                                                    aria-labelledby="taskIndex22"><span></span></label>Close the current
+                                            terminal.</p>
+                                    </li>
+                                </ol>
+                                <h4 id="review-1">Review</h4>
+                                <p>In this exercise, you configured your .NET project to access the Storage service and
+                                    manipulate a queue made available through the service.</p>
+                                <h3 id="exercise-3-add-messages-to-the-queue">Exercise 3: Add messages to the queue</h3>
+                                <h4 id="task-1-write-code-to-access-queue-messages">Task 1: Write code to access queue
+                                    messages</h4>
+                                <ol class="taskList">
+                                    <li class="task-list-item" id="taskIndex23">
+                                        <p><label class="checkbox"><input type="checkbox"
+                                                    aria-labelledby="taskIndex23"><span></span></label>In the
+                                            <strong>Main</strong> method, perform the following actions:</p>
+                                        <ol class="taskList">
+                                            <li class="task-list-item" id="taskIndex24">
+                                                <p><label class="checkbox"><input type="checkbox"
+                                                            aria-labelledby="taskIndex24"><span></span></label>Render a
+                                                    header by using the <strong>Console.WriteLine</strong> static
+                                                    method:</p>
+                                                <pre><code class="prettyprint prettyprinted" tabindex="0" style=""><span class="typ">Console</span><span class="pun">.</span><span class="typ">WriteLine</span><span class="pun">(</span><span class="pln">$</span><span class="str">"---Existing Messages---"</span><span class="pun">);</span></code></pre>
+                                            </li>
+                                            <li class="task-list-item" id="taskIndex25">
+                                                <p><label class="checkbox"><input type="checkbox"
+                                                            aria-labelledby="taskIndex25"><span></span></label>Add the
+                                                    following block of code to create variables that will be used when
+                                                    retrieving queue messages:</p>
+                                                <pre><code class="prettyprint prettyprinted" tabindex="0" style=""><span class="kwd">int</span><span class="pln"> batchSize </span><span class="pun">=</span><span class="pln"> </span><span class="lit">10</span><span class="pun">;</span><span class="pln">
+</span><span class="typ">TimeSpan</span><span class="pln"> visibilityTimeout </span><span class="pun">=</span><span class="pln"> </span><span class="typ">TimeSpan</span><span class="pun">.</span><span class="typ">FromSeconds</span><span class="pun">(</span><span class="lit">2.5d</span><span class="pun">);</span></code></pre>
+                                            </li>
+                                            <li class="task-list-item" id="taskIndex26">
+                                                <p><label class="checkbox"><input type="checkbox"
+                                                            aria-labelledby="taskIndex26"><span></span></label>Add the
+                                                    following block of code to retrieve a batch of messages
+                                                    asynchronously from the queue service and iterate over the messages:
+                                                </p>
+                                                <pre><code class="prettyprint prettyprinted" tabindex="0" style=""><span class="typ">Response</span><span class="pun">&lt;</span><span class="typ">QueueMessage</span><span class="pun">[]&gt;</span><span class="pln"> messages </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">await</span><span class="pln"> client</span><span class="pun">.</span><span class="typ">ReceiveMessagesAsync</span><span class="pun">(</span><span class="pln">batchSize</span><span class="pun">,</span><span class="pln"> visibilityTimeout</span><span class="pun">);</span><span class="pln">
+</span><span class="kwd">foreach</span><span class="pun">(</span><span class="typ">QueueMessage</span><span class="pln"> message </span><span class="kwd">in</span><span class="pln"> messages</span><span class="pun">?.</span><span class="typ">Value</span><span class="pun">)</span><span class="pln">
+</span><span class="pun">{</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+                                            </li>
+                                            <li class="task-list-item" id="taskIndex27">
+                                                <p><label class="checkbox"><input type="checkbox"
+                                                            aria-labelledby="taskIndex27"><span></span></label>Within
+                                                    the <strong>foreach</strong> block, render the
+                                                    <strong>MessageId</strong> and <strong>MessageText</strong>
+                                                    properties of the <strong><a
+                                                            href="https://docs.microsoft.com/dotnet/api/azure.storage.queues.models.queuemessage"
+                                                            target="_blank">QueueMessage</a></strong> instance:</p>
+                                                <pre><code class="prettyprint prettyprinted" tabindex="0" style=""><span class="typ">Console</span><span class="pun">.</span><span class="typ">WriteLine</span><span class="pun">(</span><span class="pln">$</span><span class="str">"[{message.MessageId}]\t{message.MessageText}"</span><span class="pun">);</span></code></pre>
+                                            </li>
+                                        </ol>
+                                    </li>
+                                    <li class="task-list-item" id="taskIndex28">
+                                        <p><label class="checkbox"><input type="checkbox"
+                                                    aria-labelledby="taskIndex28"><span></span></label>Save the
+                                            <strong>Program.cs</strong> file.</p>
+                                    </li>
+                                    <li class="task-list-item" id="taskIndex29">
+                                        <p><label class="checkbox"><input type="checkbox"
+                                                    aria-labelledby="taskIndex29"><span></span></label>Using a terminal,
+                                            build the ASP.NET web application project:</p>
+                                        <pre><code class="prettyprint prettyprinted" tabindex="0" style=""><span class="pln">dotnet build</span></code></pre>
+                                        <blockquote>
+                                            <p><strong>Note</strong>: If there are any build errors, review the
+                                                <strong>Program.cs</strong> file in the <strong>Allfiles
+                                                    (F):\Allfiles\Labs\11\Solution\MessageProcessor</strong> folder.</p>
+                                        </blockquote>
+                                    </li>
+                                    <li class="task-list-item" id="taskIndex30">
+                                        <p><label class="checkbox"><input type="checkbox"
+                                                    aria-labelledby="taskIndex30"><span></span></label>Close the current
+                                            terminal.</p>
+                                    </li>
+                                </ol>
+                                <h4 id="task-2-test-message-queue-access">Task 2: Test message queue access</h4>
+                                <ol class="taskList">
+                                    <li class="task-list-item" id="taskIndex31">
+                                        <p><label class="checkbox"><input type="checkbox"
+                                                    aria-labelledby="taskIndex31"><span></span></label>Using a terminal,
+                                            run the ASP.NET web application project:</p>
+                                        <pre><code class="prettyprint prettyprinted" tabindex="0" style=""><span class="pln">dotnet run</span></code></pre>
+                                        <blockquote>
+                                            <p><strong>Note</strong>: If there are any build errors, review the
+                                                <strong>Program.cs</strong> file in the <strong>Allfiles
+                                                    (F):\Allfiles\Labs\11\Solution\MessageProcessor</strong> folder.</p>
+                                        </blockquote>
+                                    </li>
+                                    <li class="task-list-item" id="taskIndex32">
+                                        <p><label class="checkbox"><input type="checkbox"
+                                                    aria-labelledby="taskIndex32"><span></span></label>Observe the
+                                            output from the currently running console application. The output indicates
+                                            that no messages are in the queue.</p>
+                                    </li>
+                                    <li class="task-list-item" id="taskIndex33">
+                                        <p><label class="checkbox"><input type="checkbox"
+                                                    aria-labelledby="taskIndex33"><span></span></label>Close the current
+                                            terminal.</p>
+                                    </li>
+                                    <li class="task-list-item" id="taskIndex34">
+                                        <p><label class="checkbox"><input type="checkbox"
+                                                    aria-labelledby="taskIndex34"><span></span></label>Find the
+                                            <strong>asyncstor*[yourname]*</strong> Storage account that you created
+                                            earlier in this lab.</p>
+                                    </li>
+                                    <li class="task-list-item" id="taskIndex35">
+                                        <p><label class="checkbox"><input type="checkbox"
+                                                    aria-labelledby="taskIndex35"><span></span></label>In the
+                                            <strong>Overview</strong> section of the blade, select <strong>Open in
+                                                Explorer</strong> to open the Storage account by using Storage Explorer.
+                                        </p>
+                                    </li>
+                                    <li class="task-list-item" id="taskIndex36">
+                                        <p><label class="checkbox"><input type="checkbox"
+                                                    aria-labelledby="taskIndex36"><span></span></label>In the
+                                            <strong>Azure Storage Explorer</strong> application, sign in to your Azure
+                                            account.</p>
+                                    </li>
+                                    <li class="task-list-item" id="taskIndex37">
+                                        <p><label class="checkbox"><input type="checkbox"
+                                                    aria-labelledby="taskIndex37"><span></span></label>From the
+                                            <strong>Azure Storage Explorer</strong> application, in the
+                                            <strong>EXPLORER</strong> pane, find and expand the
+                                            <strong>asyncstor*[yourname]*</strong> storage account that you created
+                                            earlier in this lab.</p>
+                                    </li>
+                                    <li class="task-list-item" id="taskIndex38">
+                                        <p><label class="checkbox"><input type="checkbox"
+                                                    aria-labelledby="taskIndex38"><span></span></label>Within the
+                                            <strong>asyncstor*[yourname]*</strong> node for the Storage account that you
+                                            created earlier in this lab, find and open the <strong>messagequeue</strong>
+                                            queue.</p>
+                                    </li>
+                                    <li class="task-list-item" id="taskIndex39">
+                                        <p><label class="checkbox"><input type="checkbox"
+                                                    aria-labelledby="taskIndex39"><span></span></label>Add a new message
+                                            to the queue with the following properties:</p>
+                                        <ul>
+                                            <li>
+                                                <p>Message text: <strong>Hello World</strong></p>
+                                            </li>
+                                            <li>
+                                                <p>Expires in: <strong>12 Hours</strong></p>
+                                            </li>
+                                            <li>
+                                                <p>Encode message body in Base 64: <strong>No</strong></p>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li class="task-list-item" id="taskIndex40">
+                                        <p><label class="checkbox"><input type="checkbox"
+                                                    aria-labelledby="taskIndex40"><span></span></label>Return to the
+                                            Visual Studio Code application.</p>
+                                    </li>
+                                    <li class="task-list-item" id="taskIndex41">
+                                        <p><label class="checkbox"><input type="checkbox"
+                                                    aria-labelledby="taskIndex41"><span></span></label>Using a terminal,
+                                            run the ASP.NET web application project:</p>
+                                        <pre><code class="prettyprint prettyprinted" tabindex="0" style=""><span class="pln">dotnet run</span></code></pre>
+                                        <blockquote>
+                                            <p><strong>Note</strong>: If there are any build errors, review the
+                                                <strong>Program.cs</strong> file in the <strong>Allfiles
+                                                    (F):\Allfiles\Labs\11\Solution\MessageProcessor</strong> folder.</p>
+                                        </blockquote>
+                                    </li>
+                                    <li class="task-list-item" id="taskIndex42">
+                                        <p><label class="checkbox"><input type="checkbox"
+                                                    aria-labelledby="taskIndex42"><span></span></label>Observe the
+                                            output from the currently running console application. The output includes
+                                            the new message that you created.</p>
+                                    </li>
+                                    <li class="task-list-item" id="taskIndex43">
+                                        <p><label class="checkbox"><input type="checkbox"
+                                                    aria-labelledby="taskIndex43"><span></span></label>Close the current
+                                            terminal.</p>
+                                    </li>
+                                </ol>
+                                <h4 id="task-3-delete-queued-messages">Task 3: Delete queued messages</h4>
+                                <ol class="taskList">
+                                    <li class="task-list-item" id="taskIndex44">
+                                        <p><label class="checkbox"><input type="checkbox"
+                                                    aria-labelledby="taskIndex44"><span></span></label>In the
+                                            <strong>Visual Studio Code</strong> window, open the
+                                            <strong>Program.cs</strong> file.</p>
+                                    </li>
+                                    <li class="task-list-item" id="taskIndex45">
+                                        <p><label class="checkbox"><input type="checkbox"
+                                                    aria-labelledby="taskIndex45"><span></span></label>Update the
+                                            <strong>foreach</strong> loop's block of code to invoke the
+                                            <strong>DeleteMessageAsync</strong> method of the
+                                            <strong>QueueMessage</strong> class, passing in the
+                                            <strong>MessageId</strong> and <strong>PopReceipt</strong> properties of the
+                                            <em>message</em> variable:</p>
+                                        <pre><code class="prettyprint prettyprinted" tabindex="0" style=""><span class="kwd">foreach</span><span class="pun">(</span><span class="typ">QueueMessage</span><span class="pln"> message </span><span class="kwd">in</span><span class="pln"> messages</span><span class="pun">?.</span><span class="typ">Value</span><span class="pun">)</span><span class="pln">
+</span><span class="pun">{</span><span class="pln">
+    </span><span class="typ">Console</span><span class="pun">.</span><span class="typ">WriteLine</span><span class="pun">(</span><span class="pln">$</span><span class="str">"[{message.MessageId}]\t{message.MessageText}"</span><span class="pun">);</span><span class="pln">
+    </span><span class="kwd">await</span><span class="pln"> client</span><span class="pun">.</span><span class="typ">DeleteMessageAsync</span><span class="pun">(</span><span class="pln">message</span><span class="pun">.</span><span class="typ">MessageId</span><span class="pun">,</span><span class="pln"> message</span><span class="pun">.</span><span class="typ">PopReceipt</span><span class="pun">);</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+                                    </li>
+                                    <li class="task-list-item" id="taskIndex46">
+                                        <p><label class="checkbox"><input type="checkbox"
+                                                    aria-labelledby="taskIndex46"><span></span></label><strong>Save</strong>
+                                            the <strong>Program.cs</strong> file.</p>
+                                    </li>
+                                    <li class="task-list-item" id="taskIndex47">
+                                        <p><label class="checkbox"><input type="checkbox"
+                                                    aria-labelledby="taskIndex47"><span></span></label>Using a terminal,
+                                            run the ASP.NET web application project:</p>
+                                        <pre><code class="prettyprint prettyprinted" tabindex="0" style=""><span class="pln">dotnet run</span></code></pre>
+                                        <blockquote>
+                                            <p><strong>Note</strong>: If there are any build errors, review the
+                                                <strong>Program.cs</strong> file in the <strong>Allfiles
+                                                    (F):\Allfiles\Labs\11\Solution\MessageProcessor</strong> folder.</p>
+                                        </blockquote>
+                                    </li>
+                                    <li class="task-list-item" id="taskIndex48">
+                                        <p><label class="checkbox"><input type="checkbox"
+                                                    aria-labelledby="taskIndex48"><span></span></label>Observe the
+                                            output from the currently running console application. The message that you
+                                            created earlier in the lab still exists because it hasn't been deleted
+                                            previously.</p>
+                                    </li>
+                                    <li class="task-list-item" id="taskIndex49">
+                                        <p><label class="checkbox"><input type="checkbox"
+                                                    aria-labelledby="taskIndex49"><span></span></label>Close the current
+                                            terminal.</p>
+                                    </li>
+                                    <li class="task-list-item" id="taskIndex50">
+                                        <p><label class="checkbox"><input type="checkbox"
+                                                    aria-labelledby="taskIndex50"><span></span></label>In the
+                                            <strong>Azure Storage Explorer</strong> window, within the
+                                            <strong>asyncstor*[yourname]*</strong> node for the Storage account that you
+                                            created earlier in this lab, find and open the <strong>messagequeue</strong>
+                                            queue.</p>
+                                    </li>
+                                    <li class="task-list-item" id="taskIndex51">
+                                        <p><label class="checkbox"><input type="checkbox"
+                                                    aria-labelledby="taskIndex51"><span></span></label>Observe the empty
+                                            list of messages in the queue.</p>
+                                        <blockquote>
+                                            <p><strong>Note</strong>: You might need to refresh the queue.</p>
+                                        </blockquote>
+                                    </li>
+                                </ol>
+                                <h4 id="review-2">Review</h4>
+                                <p>In this exercise, you read and deleted existing messages from the Storage queue by
+                                    using the .NET library.</p>
+                                <h3 id="exercise-4-queue-new-messages-by-using-net">Exercise 4: Queue new messages by
+                                    using .NET</h3>
+                                <h4 id="task-1-write-code-to-create-queue-messages">Task 1: Write code to create queue
+                                    messages</h4>
+                                <ol class="taskList">
+                                    <li class="task-list-item" id="taskIndex52">
+                                        <p><label class="checkbox"><input type="checkbox"
+                                                    aria-labelledby="taskIndex52"><span></span></label>In the
+                                            <strong>Visual Studio Code</strong> window, open the
+                                            <strong>Program.cs</strong> file.</p>
+                                    </li>
+                                    <li class="task-list-item" id="taskIndex53">
+                                        <p><label class="checkbox"><input type="checkbox"
+                                                    aria-labelledby="taskIndex53"><span></span></label>In the
+                                            <strong>Main</strong> method, perform the following actions:</p>
+                                        <ol class="taskList">
+                                            <li class="task-list-item" id="taskIndex54">
+                                                <p><label class="checkbox"><input type="checkbox"
+                                                            aria-labelledby="taskIndex54"><span></span></label>Render a
+                                                    header by using the <strong>Console.WriteLine</strong> static
+                                                    method:</p>
+                                                <pre><code class="prettyprint prettyprinted" tabindex="0" style=""><span class="typ">Console</span><span class="pun">.</span><span class="typ">WriteLine</span><span class="pun">(</span><span class="pln">$</span><span class="str">"---New Messages---"</span><span class="pun">);</span></code></pre>
+                                            </li>
+                                            <li class="task-list-item" id="taskIndex55">
+                                                <p><label class="checkbox"><input type="checkbox"
+                                                            aria-labelledby="taskIndex55"><span></span></label>Add the
+                                                    following block of code to create a new string variable named
+                                                    <em>greeting</em> with a value of <strong>Hi, Developer!</strong>,
+                                                    and then invoke the <strong>SendMessageAsync</strong> method of the
+                                                    <strong>QueueClient</strong> class by using the <em>greeting</em>
+                                                    variable as a parameter:</p>
+                                                <pre><code class="prettyprint prettyprinted" tabindex="0" style=""><span class="kwd">string</span><span class="pln"> greeting </span><span class="pun">=</span><span class="pln"> </span><span class="str">"Hi, Developer!"</span><span class="pun">;</span><span class="pln">
+</span><span class="kwd">await</span><span class="pln"> client</span><span class="pun">.</span><span class="typ">SendMessageAsync</span><span class="pun">(</span><span class="pln">greeting</span><span class="pun">);</span></code></pre>
+                                            </li>
+                                            <li class="task-list-item" id="taskIndex56">
+                                                <p><label class="checkbox"><input type="checkbox"
+                                                            aria-labelledby="taskIndex56"><span></span></label>Add the
+                                                    following block of code to render the content of the message that
+                                                    you sent:</p>
+                                                <pre><code class="prettyprint prettyprinted" tabindex="0" style=""><span class="typ">Console</span><span class="pun">.</span><span class="typ">WriteLine</span><span class="pun">(</span><span class="pln">$</span><span class="str">"Sent Message:\t{greeting}"</span><span class="pun">);</span></code></pre>
+                                            </li>
+                                        </ol>
+                                    </li>
+                                    <li class="task-list-item" id="taskIndex57">
+                                        <p><label class="checkbox"><input type="checkbox"
+                                                    aria-labelledby="taskIndex57"><span></span></label><strong>Save</strong>
+                                            the <strong>Program.cs</strong> file.</p>
+                                    </li>
+                                    <li class="task-list-item" id="taskIndex58">
+                                        <p><label class="checkbox"><input type="checkbox"
+                                                    aria-labelledby="taskIndex58"><span></span></label>Using a terminal,
+                                            run the ASP.NET web application project:</p>
+                                        <pre><code class="prettyprint prettyprinted" tabindex="0" style=""><span class="pln">dotnet run</span></code></pre>
+                                        <blockquote>
+                                            <p><strong>Note</strong>: If there are any build errors, review the
+                                                <strong>Program.cs</strong> file in the <strong>Allfiles
+                                                    (F):\Allfiles\Labs\11\Solution\MessageProcessor</strong> folder.</p>
+                                        </blockquote>
+                                    </li>
+                                    <li class="task-list-item" id="taskIndex59">
+                                        <p><label class="checkbox"><input type="checkbox"
+                                                    aria-labelledby="taskIndex59"><span></span></label>Observe the
+                                            output from the currently running console application. The content of the
+                                            new message that you sent should be in the output.</p>
+                                    </li>
+                                    <li class="task-list-item" id="taskIndex60">
+                                        <p><label class="checkbox"><input type="checkbox"
+                                                    aria-labelledby="taskIndex60"><span></span></label>Close the current
+                                            terminal.</p>
+                                    </li>
+                                </ol>
+                                <h4 id="task-2-view-queued-messages-by-using-storage-explorer">Task 2: View queued
+                                    messages by using Storage Explorer</h4>
+                                <ol class="taskList">
+                                    <li class="task-list-item" id="taskIndex61">
+                                        <p><label class="checkbox"><input type="checkbox"
+                                                    aria-labelledby="taskIndex61"><span></span></label>In the
+                                            <strong>Azure Storage Explorer</strong> window, within the
+                                            <strong>asyncstor*[yourname]*</strong> node for the Storage account that you
+                                            created earlier in this lab, find and open the <strong>messagequeue</strong>
+                                            queue.</p>
+                                    </li>
+                                    <li class="task-list-item" id="taskIndex62">
+                                        <p><label class="checkbox"><input type="checkbox"
+                                                    aria-labelledby="taskIndex62"><span></span></label>Observe the
+                                            single new message in the list of messages in the queue.</p>
+                                        <blockquote>
+                                            <p><strong>Note</strong>: You might need to refresh the queue.</p>
+                                        </blockquote>
+                                    </li>
+                                </ol>
+                                <h4 id="review-3">Review</h4>
+                                <p>In this exercise, you created new messages in the queue by using the .NET library for
+                                    Storage queues.</p>
+                                <h3 id="exercise-5-clean-up-your-subscription">Exercise 5: Clean up your subscription
+                                </h3>
+                                <h4 id="task-1-open-azure-cloud-shell-and-list-resource-groups">Task 1: Open Azure Cloud
+                                    Shell and list resource groups</h4>
+                                <ol class="taskList">
+                                    <li class="task-list-item" id="taskIndex63">
+                                        <p><label class="checkbox"><input type="checkbox"
+                                                    aria-labelledby="taskIndex63"><span></span></label>In the portal,
+                                            select the <strong>Cloud Shell</strong> icon to open a new shell instance.
+                                        </p>
+                                    </li>
+                                    <li class="task-list-item" id="taskIndex64">
+                                        <p><label class="checkbox"><input type="checkbox"
+                                                    aria-labelledby="taskIndex64"><span></span></label>If Cloud Shell
+                                            isn't already configured, configure the shell for Bash by using the default
+                                            settings.</p>
+                                    </li>
+                                </ol>
+                                <h4 id="task-2-delete-a-resource-group">Task 2: Delete a resource group</h4>
+                                <ol class="taskList">
+                                    <li class="task-list-item" id="taskIndex65">
+                                        <p><label class="checkbox"><input type="checkbox"
+                                                    aria-labelledby="taskIndex65"><span></span></label>Enter the
+                                            following command, and then select Enter to delete the
+                                            <strong>AsyncProcessor</strong> resource group:</p>
+                                        <pre><code class="prettyprint prettyprinted" tabindex="0" style=""><span class="pln">az </span><span class="kwd">group</span><span class="pln"> </span><span class="kwd">delete</span><span class="pln"> </span><span class="pun">--</span><span class="pln">name </span><span class="typ">AsyncProcessor</span><span class="pln"> </span><span class="pun">--</span><span class="kwd">no</span><span class="pun">-</span><span class="pln">wait </span><span class="pun">--</span><span class="pln">yes</span></code></pre>
+                                    </li>
+                                    <li class="task-list-item" id="taskIndex66">
+                                        <p><label class="checkbox"><input type="checkbox"
+                                                    aria-labelledby="taskIndex66"><span></span></label>Close the Cloud
+                                            Shell pane in the portal.</p>
+                                    </li>
+                                </ol>
+                                <h4 id="task-3-close-the-active-application">Task 3: Close the active application</h4>
+                                <ol class="taskList">
+                                    <li class="task-list-item" id="taskIndex67">
+                                        <p><label class="checkbox"><input type="checkbox"
+                                                    aria-labelledby="taskIndex67"><span></span></label>Close the
+                                            currently running Microsoft Edge application.</p>
+                                    </li>
+                                    <li class="task-list-item" id="taskIndex68">
+                                        <p><label class="checkbox"><input type="checkbox"
+                                                    aria-labelledby="taskIndex68"><span></span></label>Close the
+                                            currently running Visual Studio Code application.</p>
+                                    </li>
+                                    <li class="task-list-item" id="taskIndex69">
+                                        <p><label class="checkbox"><input type="checkbox"
+                                                    aria-labelledby="taskIndex69"><span></span></label>Close the
+                                            currently running Azure Storage Explorer application.</p>
+                                    </li>
+                                </ol>
+                                <h4 id="review-4">Review</h4>
+                                <p>In this exercise, you cleaned up your subscription by removing the resource group
+                                    that was used in this lab.</p>
+                            </include>
+                            <hr>
+                            <h3 id="congratulations">Congratulations!</h3>
+                            <p>You have successfully completed this exercise. Click <strong>End</strong> to advance to
+                                the next exercise.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <textarea id="copyInput" style="position: absolute; left:-10000px; top:-10000px; display:none;"></textarea>
+    <style id="design-studio-animate">
+        .designstudio-animated {
+            -webkit-animation-duration: .5s;
+            animation-duration: .5s;
+            -webkit-animation-fill-mode: both;
+            animation-fill-mode: both;
+        }
+
+        @keyframes designstudio-fadeOut {
+            from {
+                opacity: 1;
+            }
+
+            to {
+                opacity: 0;
+            }
+        }
+
+        .designstudio-fadeOut {
+            animation-name: designstudio-fadeOut;
+        }
+
+        @-webkit-keyframes designstudio-fadeInUp {
+            from {
+                opacity: 0;
+                -webkit-transform: translate3d(0, 100%, 0);
+                transform: translate3d(0, 100%, 0);
+            }
+
+            to {
+                opacity: 1;
+                -webkit-transform: none;
+                transform: none;
+            }
+        }
+
+        @keyframes designstudio-fadeInUp {
+            from {
+                opacity: 0;
+                -webkit-transform: translate3d(0, 100%, 0);
+                transform: translate3d(0, 100%, 0);
+            }
+
+            to {
+                opacity: 1;
+                -webkit-transform: none;
+                transform: none;
+            }
+        }
+
+        .designstudio-fadeInUp {
+            -webkit-animation-name: designstudio-fadeInUp;
+            animation-name: designstudio-fadeInUp;
+        }
+
+        @-webkit-keyframes designstudio-fadeInDown {
+            from {
+                opacity: 0;
+                -webkit-transform: translate3d(0, -100%, 0);
+                transform: translate3d(0, -100%, 0);
+            }
+
+            to {
+                opacity: 1;
+                -webkit-transform: none;
+                transform: none;
+            }
+        }
+
+        @keyframes designstudio-fadeInDown {
+            from {
+                opacity: 0;
+                -webkit-transform: translate3d(0, -100%, 0);
+                transform: translate3d(0, -100%, 0);
+            }
+
+            to {
+                opacity: 1;
+                -webkit-transform: none;
+                transform: none;
+            }
+        }
+
+        .designstudio-fadeInDown {
+            -webkit-animation-name: designstudio-fadeInDown;
+            animation-name: designstudio-fadeInDown;
+        }
+
+        @-webkit-keyframes designstudio-fadeInLeft {
+            from {
+                opacity: 0;
+                -webkit-transform: translate3d(-100%, 0, 0);
+                transform: translate3d(-100%, 0, 0);
+            }
+
+            to {
+                opacity: 1;
+                -webkit-transform: none;
+                transform: none;
+            }
+        }
+
+        @keyframes designstudio-fadeInLeft {
+            from {
+                opacity: 0;
+                -webkit-transform: translate3d(-100%, 0, 0);
+                transform: translate3d(-100%, 0, 0);
+            }
+
+            to {
+                opacity: 1;
+                -webkit-transform: none;
+                transform: none;
+            }
+        }
+
+        .designstudio-fadeInLeft {
+            -webkit-animation-name: designstudio-fadeInLeft;
+            animation-name: designstudio-fadeInLeft;
+        }
+
+        @-webkit-keyframes designstudio-fadeInRight {
+            from {
+                opacity: 0;
+                -webkit-transform: translate3d(100%, 0, 0);
+                transform: translate3d(100%, 0, 0);
+            }
+
+            to {
+                opacity: 1;
+                -webkit-transform: none;
+                transform: none;
+            }
+        }
+
+        @keyframes designstudio-fadeInRight {
+            from {
+                opacity: 0;
+                -webkit-transform: translate3d(100%, 0, 0);
+                transform: translate3d(100%, 0, 0);
+            }
+
+            to {
+                opacity: 1;
+                -webkit-transform: none;
+                transform: none;
+            }
+        }
+
+        .designstudio-fadeInRight {
+            -webkit-animation-name: designstudio-fadeInRight;
+            animation-name: designstudio-fadeInRight;
+        }
+
+        @-webkit-keyframes designstudio-fadeOutUp {
+            from {
+                opacity: 1;
+            }
+
+            to {
+                opacity: 0;
+                -webkit-transform: translate3d(0, -100%, 0);
+                transform: translate3d(0, -100%, 0);
+            }
+        }
+
+        @keyframes designstudio-fadeOutUp {
+            from {
+                opacity: 1;
+            }
+
+            to {
+                opacity: 0;
+                -webkit-transform: translate3d(0, -100%, 0);
+                transform: translate3d(0, -100%, 0);
+            }
+        }
+
+        .designstudio-fadeOutUp {
+            -webkit-animation-name: designstudio-fadeOutUp;
+            animation-name: designstudio-fadeOutUp;
+        }
+
+        @-webkit-keyframes designstudio-fadeOutDown {
+            from {
+                opacity: 1;
+            }
+
+            to {
+                opacity: 0;
+                -webkit-transform: translate3d(0, 100%, 0);
+                transform: translate3d(0, 100%, 0);
+            }
+        }
+
+        @keyframes designstudio-fadeOutDown {
+            from {
+                opacity: 1;
+            }
+
+            to {
+                opacity: 0;
+                -webkit-transform: translate3d(0, 100%, 0);
+                transform: translate3d(0, 100%, 0);
+            }
+        }
+
+        .designstudio-fadeOutDown {
+            -webkit-animation-name: designstudio-fadeOutDown;
+            animation-name: designstudio-fadeOutDown;
+        }
+
+        @-webkit-keyframes designstudio-fadeOutLeft {
+            from {
+                opacity: 1;
+            }
+
+            to {
+                opacity: 0;
+                -webkit-transform: translate3d(-100%, 0, 0);
+                transform: translate3d(-100%, 0, 0);
+            }
+        }
+
+        @keyframes designstudio-fadeOutLeft {
+            from {
+                opacity: 1;
+            }
+
+            to {
+                opacity: 0;
+                -webkit-transform: translate3d(-100%, 0, 0);
+                transform: translate3d(-100%, 0, 0);
+            }
+        }
+
+        .designstudio-fadeOutLeft {
+            -webkit-animation-name: designstudio-fadeOutLeft;
+            animation-name: designstudio-fadeOutLeft;
+        }
+
+        @-webkit-keyframes designstudio-fadeOutRight {
+            from {
+                opacity: 1;
+            }
+
+            to {
+                opacity: 0;
+                -webkit-transform: translate3d(100%, 0, 0);
+                transform: translate3d(100%, 0, 0);
+            }
+        }
+
+        @keyframes designstudio-fadeOutRight {
+            from {
+                opacity: 1;
+            }
+
+            to {
+                opacity: 0;
+                -webkit-transform: translate3d(100%, 0, 0);
+                transform: translate3d(100%, 0, 0);
+            }
+        }
+
+        .designstudio-fadeOutRight {
+            -webkit-animation-name: designstudio-fadeOutRight;
+            animation-name: designstudio-fadeOutRight;
+        }
+
+        @-webkit-keyframes designstudio-slideInDown {
+            from {
+                -webkit-transform: translate3d(0, -100%, 0);
+                transform: translate3d(0, -100%, 0);
+                visibility: visible;
+            }
+
+            to {
+                -webkit-transform: translate3d(0, 0, 0);
+                transform: translate3d(0, 0, 0);
+            }
+        }
+
+        @keyframes designstudio-slideInDown {
+            from {
+                -webkit-transform: translate3d(0, -100%, 0);
+                transform: translate3d(0, -100%, 0);
+                visibility: visible;
+            }
+
+            to {
+                -webkit-transform: translate3d(0, 0, 0);
+                transform: translate3d(0, 0, 0);
+            }
+        }
+
+        .designstudio-slideInDown {
+            -webkit-animation-name: designstudio-slideInDown;
+            animation-name: designstudio-slideInDown;
+        }
+
+        @-webkit-keyframes designstudio-slideInLeft {
+            from {
+                -webkit-transform: translate3d(-100%, 0, 0);
+                transform: translate3d(-100%, 0, 0);
+                visibility: visible;
+            }
+
+            to {
+                -webkit-transform: translate3d(0, 0, 0);
+                transform: translate3d(0, 0, 0);
+            }
+        }
+
+        @keyframes designstudio-slideInLeft {
+            from {
+                -webkit-transform: translate3d(-100%, 0, 0);
+                transform: translate3d(-100%, 0, 0);
+                visibility: visible;
+            }
+
+            to {
+                -webkit-transform: translate3d(0, 0, 0);
+                transform: translate3d(0, 0, 0);
+            }
+        }
+
+        .designstudio-slideInLeft {
+            -webkit-animation-name: designstudio-slideInLeft;
+            animation-name: designstudio-slideInLeft;
+        }
+
+        @-webkit-keyframes designstudio-slideInRight {
+            from {
+                -webkit-transform: translate3d(100%, 0, 0);
+                transform: translate3d(100%, 0, 0);
+                visibility: visible;
+            }
+
+            to {
+                -webkit-transform: translate3d(0, 0, 0);
+                transform: translate3d(0, 0, 0);
+            }
+        }
+
+        @keyframes designstudio-slideInRight {
+            from {
+                -webkit-transform: translate3d(100%, 0, 0);
+                transform: translate3d(100%, 0, 0);
+                visibility: visible;
+            }
+
+            to {
+                -webkit-transform: translate3d(0, 0, 0);
+                transform: translate3d(0, 0, 0);
+            }
+        }
+
+        .designstudio-slideInRight {
+            -webkit-animation-name: designstudio-slideInRight;
+            animation-name: designstudio-slideInRight;
+        }
+
+        @-webkit-keyframes designstudio-slideInUp {
+            from {
+                -webkit-transform: translate3d(0, 100%, 0);
+                transform: translate3d(0, 100%, 0);
+                visibility: visible;
+            }
+
+            to {
+                -webkit-transform: translate3d(0, 0, 0);
+                transform: translate3d(0, 0, 0);
+            }
+        }
+
+        @keyframes designstudio-slideInUp {
+            from {
+                -webkit-transform: translate3d(0, 100%, 0);
+                transform: translate3d(0, 100%, 0);
+                visibility: visible;
+            }
+
+            to {
+                -webkit-transform: translate3d(0, 0, 0);
+                transform: translate3d(0, 0, 0);
+            }
+        }
+
+        .designstudio-slideInUp {
+            -webkit-animation-name: designstudio-slideInUp;
+            animation-name: designstudio-slideInUp;
+        }
+
+        .designstudio-button:focus {
+            outline: 2px solid #757575;
+        }
+    </style>
+</body>
+
+</html>

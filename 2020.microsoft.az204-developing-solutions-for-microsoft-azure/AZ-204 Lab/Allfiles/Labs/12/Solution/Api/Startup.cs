@@ -15,7 +15,7 @@ namespace SimpleApi
 {
     public class Startup
     {
-        private const string INSTRUMENTATION_KEY = "4aa8db77-355e-4853-8b1f-ef0fb9f2dcf8";
+        private const string INSTRUMENTATION_KEY = "<<key>>";
 
         public Startup(IConfiguration configuration)
         {
@@ -39,11 +39,8 @@ namespace SimpleApi
                 app.UseDeveloperExceptionPage();
             }
 
-
             app.UseRouting();
-
             app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

@@ -8,7 +8,7 @@ public class Program
 {
     private const string topicEndpoint = "https://hrtopicsidney.eastus-1.eventgrid.azure.net/api/events";
 
-    private const string topicKey = "zYOUPinkD7kmPEsFQQ4dUMqs2TXEO93goDfze0SbC5c=";
+    private const string topicKey = "<<key>>";
 
     public static async Task Main(string[] args)
     {
