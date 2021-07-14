@@ -1,14 +1,14 @@
-# azure-101
+# cloud-azure
 
 ![](https://img.shields.io/badge/language-xxx-blue)
 ![](https://img.shields.io/badge/technology-xxx,%20xxx-blue)
 ![](https://img.shields.io/badge/development%20year-2021-orange)
 
-![](https://img.shields.io/github/languages/top/shijiansu/azure-101)
-![](https://img.shields.io/github/languages/count/shijiansu/azure-101)
-![](https://img.shields.io/github/languages/code-size/shijiansu/azure-101)
-![](https://img.shields.io/github/repo-size/shijiansu/azure-101)
-![](https://img.shields.io/github/last-commit/shijiansu/azure-101?color=red)
+![](https://img.shields.io/github/languages/top/shijiansu/cloud-azure)
+![](https://img.shields.io/github/languages/count/shijiansu/cloud-azure)
+![](https://img.shields.io/github/languages/code-size/shijiansu/cloud-azure)
+![](https://img.shields.io/github/repo-size/shijiansu/cloud-azure)
+![](https://img.shields.io/github/last-commit/shijiansu/cloud-azure?color=red)
 
 ## Outline
 
